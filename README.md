@@ -72,6 +72,7 @@ The Coffee Workflow Digitization System aims to streamline the buying, selling, 
 
 - Yonathan Jabir (https://github.com/yonathanjj)
 - Kirubel Deke (https://github.com/KirubDeke)
+- Abreham kassa(https://github.com/Abrishkassa)
 
 ## Getting Started
 
