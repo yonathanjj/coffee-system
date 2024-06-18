@@ -1,0 +1,68 @@
+database schema in SQlite
+
+-- Table for storing farmers/suppliers
+CREATE TABLE Farmers (
+  farmer_id INTEGER PRIMARY KEY,
+  farmer_name TEXT NOT NULL,
+  address TEXT
+);
+
+-- Table for storing coffee products
+CREATE TABLE Products (
+  product_id INTEGER PRIMARY KEY,
+  product_name TEXT NOT NULL,
+  price_per_kilo REAL NOT NULL,
+  stock_quantity INTEGER DEFAULT 0
+);
+
+-- Table for storing coffee purchases
+CREATE TABLE Purchases (
+  purchase_id INTEGER PRIMARY KEY,
+  farmer_id INTEGER,
+  product_id INTEGER,
+  purchase_date DATE NOT NULL,
+  purchase_time TIME NOT NULL,
+  payment_type TEXT NOT NULL,
+  amount_paid REAL NOT NULL,
+  total_amount REAL NOT NULL,
+  kilos_purchased REAL NOT NULL,
+  cost_per_kilo REAL NOT NULL,
+  FOREIGN KEY (farmer_id) REFERENCES Farmers(farmer_id),
+  FOREIGN KEY (product_id) REFERENCES Products(product_id)
+);
+
+-- Table for storing payment history
+CREATE TABLE PaymentHistory (
+  payment_id INTEGER PRIMARY KEY,
+  purchase_id INTEGER,
+  payment_date DATE NOT NULL,
+  amount_paid REAL NOT NULL,
+  FOREIGN KEY (purchase_id) REFERENCES Purchases(purchase_id)
+);
+
+-- Table for tracking loans
+CREATE TABLE Loans (
+  loan_id INTEGER PRIMARY KEY,
+  purchase_id INTEGER,
+  loan_amount REAL NOT NULL,
+  interest_rate REAL NOT NULL,
+  repayment_terms TEXT,
+  loan_status TEXT,
+  FOREIGN KEY (purchase_id) REFERENCES Purchases(purchase_id)
+);
+
+-- Table for generating reports
+CREATE TABLE Reports (
+  report_id INTEGER PRIMARY KEY,
+  report_date DATE NOT NULL,
+  total_purchases REAL NOT NULL,
+  total_amount_paid REAL NOT NULL
+);
+
+-- Table for storing user accounts
+CREATE TABLE Users (
+  user_id INTEGER PRIMARY KEY,
+  username TEXT NOT NULL,
+  password TEXT NOT NULL,
+  role TEXT
+);
