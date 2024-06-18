@@ -1,0 +1,70 @@
+// Define the Farmer collection
+const farmerSchema = {
+  farmer_name: { type: String, required: true },
+  address: String
+};
+
+// Define the Product collection
+const productSchema = {
+  product_name: { type: String, required: true },
+  price_per_kilo: { type: Number, required: true },
+  stock_quantity: { type: Number, default: 0 }
+};
+
+// Define the Purchase collection
+const purchaseSchema = {
+  farmer: { type: ObjectId, ref: 'Farmers', required: true },
+  product: { type: ObjectId, ref: 'Products', required: true },
+  purchase_date: { type: Date, default: Date.now },
+  payment_type: { type: String, required: true },
+  amount_paid: { type: Number, required: true },
+  total_amount: { type: Number, required: true },
+  kilos_purchased: { type: Number, required: true },
+  cost_per_kilo: { type: Number, required: true }
+};
+
+// Define the PaymentHistory collection
+const paymentHistorySchema = {
+  purchase: { type: ObjectId, ref: 'Purchases', required: true },
+  payment_date: { type: Date, default: Date.now },
+  amount_paid: { type: Number, required: true }
+};
+
+// Define the Loan collection
+const loanSchema = {
+  purchase: { type: ObjectId, ref: 'Purchases', required: true },
+  loan_amount: { type: Number, required: true },
+  interest_rate: { type: Number, required: true },
+  repayment_terms: String,
+  loan_status: String
+};
+
+// Define the Report collection
+const reportSchema = {
+  report_date: { type: Date, default: Date.now },
+  total_purchases: { type: Number, required: true },
+  total_amount_paid: { type: Number, required: true }
+};
+
+// Define the User collection
+const userSchema = {
+  username: { type: String, required: true },
+  password: { type: String, required: true },
+  role: String
+};
+
+// Create the corresponding collections
+db.createCollection('Farmers', { validator: { $jsonSchema: farmerSchema } });
+db.createCollection('Products', { validator: { $jsonSchema: productSchema } });
+db.createCollection('Purchases', { validator: { $jsonSchema: purchaseSchema } });
+db.createCollection('PaymentHistories', { validator: { $jsonSchema: paymentHistorySchema } });
+db.createCollection('Loans', { validator: { $jsonSchema: loanSchema } });
+db.createCollection('Reports', { validator: { $jsonSchema: reportSchema } });
+db.createCollection('Users', { validator: { $jsonSchema: userSchema } });
+
+// Define the relationships between collections
+db.Products.createIndex({ farmer: 1 });
+db.Purchases.createIndex({ farmer: 1, product: 1 });
+db.PaymentHistories.createIndex({ purchase: 1 });
+db.Loans.createIndex({ purchase: 1 });
+
