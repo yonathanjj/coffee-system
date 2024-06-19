@@ -1,70 +1,202 @@
 // Define the Farmer collection
-const farmerSchema = {
-  farmer_name: { type: String, required: true },
-  address: String
-};
+db.createCollection('Farmers', {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["farmer_name"],
+      properties: {
+        farmer_id: {
+          bsonType: "int"
+        },
+        farmer_name: {
+          bsonType: "string"
+        },
+        address: {
+          bsonType: "string"
+        }
+      }
+    }
+  }
+});
 
 // Define the Product collection
-const productSchema = {
-  product_name: { type: String, required: true },
-  price_per_kilo: { type: Number, required: true },
-  stock_quantity: { type: Number, default: 0 }
-};
+db.createCollection('Products', {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["product_name", "price_per_kilo"],
+      properties: {
+        product_id: {
+          bsonType: "int"
+        },
+        product_name: {
+          bsonType: "string"
+        },
+        price_per_kilo: {
+          bsonType: "double"
+        },
+        stock_quantity: {
+          bsonType: "int",
+          default: 0
+        }
+      }
+    }
+  }
+});
 
 // Define the Purchase collection
-const purchaseSchema = {
-  farmer: { type: ObjectId, ref: 'Farmers', required: true },
-  product: { type: ObjectId, ref: 'Products', required: true },
-  purchase_date: { type: Date, default: Date.now },
-  payment_type: { type: String, required: true },
-  amount_paid: { type: Number, required: true },
-  total_amount: { type: Number, required: true },
-  kilos_purchased: { type: Number, required: true },
-  cost_per_kilo: { type: Number, required: true }
-};
+db.createCollection('Purchases', {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["purchase_date", "purchase_time", "payment_type", "amount_paid", "total_amount", "kilos_purchased", "cost_per_kilo"],
+      properties: {
+        purchase_id: {
+          bsonType: "int"
+        },
+        farmer_id: {
+          bsonType: "int"
+        },
+        product_id: {
+          bsonType: "int"
+        },
+        purchase_date: {
+          bsonType: "date"
+        },
+        purchase_time: {
+          bsonType: "string"
+        },
+        payment_type: {
+          bsonType: "string"
+        },
+        amount_paid: {
+          bsonType: "double"
+        },
+        total_amount: {
+          bsonType: "double"
+        },
+        kilos_purchased: {
+          bsonType: "double"
+        },
+        cost_per_kilo: {
+          bsonType: "double"
+        }
+      }
+    }
+  }
+});
 
 // Define the PaymentHistory collection
-const paymentHistorySchema = {
-  purchase: { type: ObjectId, ref: 'Purchases', required: true },
-  payment_date: { type: Date, default: Date.now },
-  amount_paid: { type: Number, required: true }
-};
+db.createCollection('PaymentHistory', {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["payment_date", "amount_paid"],
+      properties: {
+        payment_id: {
+          bsonType: "int"
+        },
+        purchase_id: {
+          bsonType: "int"
+        },
+        payment_date: {
+          bsonType: "date"
+        },
+        amount_paid: {
+          bsonType: "double"
+        }
+      }
+    }
+  }
+});
 
-// Define the Loan collection
-const loanSchema = {
-  purchase: { type: ObjectId, ref: 'Purchases', required: true },
-  loan_amount: { type: Number, required: true },
-  interest_rate: { type: Number, required: true },
-  repayment_terms: String,
-  loan_status: String
-};
+// Define the Loans collection
+db.createCollection('Loans', {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["loan_amount", "interest_rate"],
+      properties: {
+        loan_id: {
+          bsonType: "int"
+        },
+        purchase_id: {
+          bsonType: "int"
+        },
+        loan_amount: {
+          bsonType: "double"
+        },
+        interest_rate: {
+          bsonType: "double"
+        },
+        repayment_terms: {
+          bsonType: "string"
+        },
+        loan_status: {
+          bsonType: "string"
+        }
+      }
+    }
+  }
+});
 
-// Define the Report collection
-const reportSchema = {
-  report_date: { type: Date, default: Date.now },
-  total_purchases: { type: Number, required: true },
-  total_amount_paid: { type: Number, required: true }
-};
+// Define the Reports collection
+db.createCollection('Reports', {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["report_date", "total_purchases", "total_amount_paid"],
+      properties: {
+        report_id: {
+          bsonType: "int"
+        },
+        report_date: {
+          bsonType: "date"
+        },
+        total_purchases: {
+          bsonType: "double"
+        },
+        total_amount_paid: {
+          bsonType: "double"
+        }
+      }
+    }
+  }
+});
 
-// Define the User collection
-const userSchema = {
-  username: { type: String, required: true },
-  password: { type: String, required: true },
-  role: String
-};
+// Define the Users collection
+db.createCollection('Users', {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["username", "password"],
+      properties: {
+        user_id: {
+          bsonType: "int"
+        },
+        username: {
+          bsonType: "string"
+        },
+        password: {
+          bsonType: "string"
+        },
+        role: {
+          bsonType: "string"
+        }
+      }
+    }
+  }
+});
 
-// Create the corresponding collections
-db.createCollection('Farmers', { validator: { $jsonSchema: farmerSchema } });
-db.createCollection('Products', { validator: { $jsonSchema: productSchema } });
-db.createCollection('Purchases', { validator: { $jsonSchema: purchaseSchema } });
-db.createCollection('PaymentHistories', { validator: { $jsonSchema: paymentHistorySchema } });
-db.createCollection('Loans', { validator: { $jsonSchema: loanSchema } });
-db.createCollection('Reports', { validator: { $jsonSchema: reportSchema } });
-db.createCollection('Users', { validator: { $jsonSchema: userSchema } });
 
-// Define the relationships between collections
-db.Products.createIndex({ farmer: 1 });
-db.Purchases.createIndex({ farmer: 1, product: 1 });
-db.PaymentHistories.createIndex({ purchase: 1 });
-db.Loans.createIndex({ purchase: 1 });
+// Index for the farmer_id field in Purchases collection
+db.Purchases.createIndex({ farmer_id: 1 });
 
+// Index for the product_id field in Purchases collection
+db.Purchases.createIndex({ product_id: 1 });
+
+// Index for the purchase_id field in PaymentHistory collection
+db.PaymentHistory.createIndex({ purchase_id: 1 });
+
+// Index for the purchase_id field in Loans collection
+db.Loans.createIndex({ purchase_id: 1 });
