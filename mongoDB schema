@@ -200,3 +200,225 @@ db.PaymentHistory.createIndex({ purchase_id: 1 });
 
 // Index for the purchase_id field in Loans collection
 db.Loans.createIndex({ purchase_id: 1 });
+
+
+
+
+
+
+Collections and their Attributes:
+Farmers
+
+farmer_id (int, PK)
+farmer_name (string)
+address (string)
+Products
+
+product_id (int, PK)
+product_name (string)
+price_per_kilo (double)
+stock_quantity (int, default: 0)
+Purchases
+
+purchase_id (int, PK)
+farmer_id (int, FK references Farmers)
+product_id (int, FK references Products)
+purchase_date (date)
+purchase_time (string)
+payment_type (string)
+amount_paid (double)
+total_amount (double)
+kilos_purchased (double)
+cost_per_kilo (double)
+PaymentHistory
+
+payment_id (int, PK)
+purchase_id (int, FK references Purchases)
+payment_date (date)
+amount_paid (double)
+Loans
+
+loan_id (int, PK)
+purchase_id (int, FK references Purchases)
+loan_amount (double)
+interest_rate (double)
+repayment_terms (string)
+loan_status (string)
+Reports
+
+report_id (int, PK)
+report_date (date)
+total_purchases (double)
+total_amount_paid (double)
+Users
+
+user_id (int, PK)
+username (string)
+password (string)
+role (string)
+Relationships:
+Farmers to Purchases
+
+One-to-Many (One farmer can have multiple purchases)
+Products to Purchases
+
+One-to-Many (One product can be part of multiple purchases)
+Purchases to PaymentHistory
+
+One-to-Many (One purchase can have multiple payment records)
+Purchases to Loans
+
+One-to-One (One purchase can be associated with one loan)
+
+
+###ERD Representation:
+
+Farmers
+---------
+farmer_id (PK)
+farmer_name
+address
+
+
+Products
+---------
+product_id (PK)
+product_name
+price_per_kilo
+stock_quantity
+
+
+Purchases
+---------
+purchase_id (PK)
+farmer_id (FK)
+product_id (FK)
+purchase_date
+purchase_time
+payment_type
+amount_paid
+total_amount
+kilos_purchased
+cost_per_kilo
+
+
+PaymentHistory
+---------
+payment_id (PK)
+purchase_id (FK)
+payment_date
+amount_paid
+
+
+Loans
+---------
+loan_id (PK)
+purchase_id (FK)
+loan_amount
+interest_rate
+repayment_terms
+loan_status
+
+
+Reports
+---------
+report_id (PK)
+report_date
+total_purchases
+total_amount_paid
+
+
+Users
+---------
+user_id (PK)
+username
+password
+role
+
+
+###Diagram:
+
+1,Farmers entity connected to Purchases entity via farmer_id.
+2,Products entity connected to Purchases entity via product_id.
+3,Purchases entity connected to PaymentHistory entity via purchase_id.
+4,Purchases entity connected to Loans entity via purchase_id.
+
+
++-------------+         +-------------+         +--------------+
+|   Farmers   |         |   Products  |         |   Purchases  |
++-------------+         +-------------+         +--------------+
+| farmer_id   |<>-------| product_id  |         | purchase_id  |
+| farmer_name |         | product_name|<>-------| farmer_id    |
+| address     |         | price_per_kilo |      | product_id   |
++-------------+         | stock_quantity |      | purchase_date|
+                        +--------------+      | purchase_time |
+                                               | payment_type  |
+                                               | amount_paid   |
+                                               | total_amount  |
+                                               | kilos_purchased |
+                                               | cost_per_kilo |
+                                               +--------------+
+                                                    |
+                                                    |
+                                                    |
+                                               +------------------+
+                                               |  PaymentHistory  |
+                                               +------------------+
+                                               | payment_id       |
+                                               | purchase_id      |
+                                               | payment_date     |
+                                               | amount_paid      |
+                                               +------------------+
+                                                    |
+                                                    |
+                                                    |
+                                               +------------------+
+                                               |      Loans       |
+                                               +------------------+
+                                               | loan_id          |
+                                               | purchase_id      |
+                                               | loan_amount      |
+                                               | interest_rate    |
+                                               | repayment_terms  |
+                                               | loan_status      |
+                                               +------------------+
+                                                    |
+                                                    |
+                                                    |
+                                               +------------------+
+                                               |     Reports      |
+                                               +------------------+
+                                               | report_id        |
+                                               | report_date      |
+                                               | total_purchases  |
+                                               | total_amount_paid|
+                                               +------------------+
+                                                    |
+                                                    |
+                                                    |
+                                               +------------------+
+                                               |      Users       |
+                                               +------------------+
+                                               | user_id          |
+                                               | username         |
+                                               | password         |
+                                               | role             |
+                                               +------------------+
+
+
+
+###Description of Relationships:
+
+1, Farmers has a one-to-many relationship with Purchases:
+ *farmer_id in Farmers references farmer_id in Purchases.
+
+2, Products has a one-to-many relationship with Purchases:
+ *product_id in Products references product_id in Purchases.
+
+3, Purchases has a one-to-many relationship with PaymentHistory:
+ *purchase_id in Purchases references purchase_id in PaymentHistory.
+
+4, Purchases has a one-to-one relationship with Loans:
+ *purchase_id in Purchases references purchase_id in Loans.
+
+5, Reports and Users are standalone collections without explicit relationships to others.
